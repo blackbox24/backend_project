@@ -20,7 +20,7 @@ class ListDataModel:
     createdAt:datetime
     updatedAt:datetime
 
-    def __init__(self,description="",status="mark in progress",id=None):
+    def __init__(self,description="",status="not done",id=None):
         if id == None:
             self.description = description
             self.status = status
