@@ -13,7 +13,7 @@ parser.add_argument("--description",help="add description of each expense",type=
 parser.add_argument("--amount",help="add amount to each amount",type=float)
 parser.add_argument("--id",help="fetch each expense by unique id",type=int)
 parser.add_argument("--summary",help="summarize all expenses")
-parser.add_argument("--month",help="specify the month to summarize")
+parser.add_argument("--month",help="specify the month to summarize",type=int)
 
 def options(args,expense):
     if args.description and args.amount:
@@ -37,20 +37,32 @@ if args.command == "list":
     logger.info("list expense")
     expense.get_all()
 
-if args.command == "add":
+elif args.command == "add":
     logger.info("add expense")
     options(args,expense)
     expense.create()
-    
 
 elif args.command == "update":
-    logger.info("update expense")
+    logger.info("updatin expense")
     options(args,expense)
+    if args.id:
+        expense.update(
+            args.id,
+            expense.description,
+            expense.amount
+        )
 
 elif args.command == "delete":
-    logger.info("delete expense")
-elif args.summary == "summary":
+    logger.info("deletin expense")
+    if args.id:
+        expense.delete(args.id)
+
+elif args.command == "summary":
     logger.info("summarize expense")
+    if args.month:
+        expense.summary(filter=args.month)
+    else:
+        expense.summary()
 
 else:
     logging.error("invalid command: Use py main.py -h")
