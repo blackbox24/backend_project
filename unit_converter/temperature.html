@@ -9,39 +9,39 @@
 <body>
     <nav>
         <a href="./index.html">Length</a>
-        <a href="./weight.html"  class="active-nav">Weight</a>
-        <a href="./temperature.html">Tempature</a>
+        <a href="./weight.html">Weight</a>
+        <a href="./tempature.html" class="active-nav">Tempature</a>
     </nav>
     <main>
         <h2 id="errors"></h2>
         <div id="convert-page">
-            <div id="weight" class="active">
-                <form method="post" id="Weight-form">
+            <div id="Length" class="active">
+                <form method="post" id="Temperature-form">
                     <div>
-                        <label>Enter the Length to convert</label>
-                    <input type="number" name="length_value" placeholder="Enter the Weight to convert"/>
+                        <label>Enter the temperature to convert</label>
+                        <input type="number" name="temperature_value" placeholder="Enter the Temperature to convert"/>
                     </div>
                     <div>
                         <label>Unit to convert from</label>
                         <select name="unit_from" required>
                             <option value="" disabled selected>Select unit</option>
-                            <option value="mg">Milligram</option>
-                            <option value="g">Gram</option>
-                            
+                            <option value="K">Kelvin</option>
+                            <option value="°C">Celsius</option>
+                            <option value="°F">Fahrenheit</option>
                         </select>
                     </div>
                     <div>
                         <label>Unit to convert to</label>
                         <select name="unit_to" required>
                             <option value="" disabled selected>Select unit</option>
-                            <option value="mg">Milligram</option>
-                            <option value="g">Gram</option>
+                            <option value="K">Kelvin</option>
+                            <option value="°C">Celsius</option>
+                            <option value="°F">Fahrenheit</option>
                         </select>
                     </div>
                     <button type="submit" value="submit">Convert</button>
                 </form>
             </div>
-            
         </div>
         <div id="result-page">
             <h3>Result of your calulation</h3>
@@ -53,7 +53,7 @@
     </main>
     
     <footer>
-        <script src="./js/weight_converter.js" type="text/javascript"></script>
+        <script src="./js/temperature_converter.js" type="text/javascript"></script>
         <script type="text/javascript">
             document.getElementById("reset-btn").addEventListener("click",()=>{  
                 window.location.reload();
