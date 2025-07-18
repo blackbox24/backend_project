@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Personal Blog {% endblock %}
+
+{% block content %}
+    <h1 id="title">Personal Blog</h1>
+    <ul>
+        {% for blog in blogs %}
+            <li>
+                <a href="{% url 'pages:article' pk=blog.id %}" id="blog-title">{{blog.title}}</a>
+                <span href="#" id="blog-date">{{blog.updated_at}}</span>
+            </li>
+        {% empty %}
+            <li>
+                <span href="#" id="">No Data Found</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

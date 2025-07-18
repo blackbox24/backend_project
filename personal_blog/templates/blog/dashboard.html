@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} Admin {% endblock %}
+
+{% block content %}
+    <div id="blog-header">
+        <span id="blog-header-title">Personal Blog</span>
+        <span id="blog-header-btn">
+            <a href="{% url 'pages:new' %}">+ Add</a>
+        </span>
+    </div>
+    
+    <ul>
+        {% for blog in blogs %}
+            <li>
+                <a href="{% url 'pages:article' pk=blog.id %}" id="blog-title">{{blog.title}}</a>
+                <a href="{% url 'pages:edit' pk=blog.id %}" id="blog-date">Edit</a>
+                <a href="{% url 'pages:delete' pk=blog.id %}" id="blog-date">Delete</a>
+            </li>
+        {% empty %}
+            <li>
+                <span href="#" id="">No Data Found</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

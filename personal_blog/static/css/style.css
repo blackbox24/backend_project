@@ -1,0 +1,56 @@
+body {
+  font-family: cursive;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+ul > li {
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid black;
+  width: 100%;
+  padding: 2%;
+  margin-bottom: 2%;
+}
+
+#title {
+  text-align: center;
+}
+
+ul > li > a {
+  text-decoration: none;
+}
+
+#blog-title {
+  color: black;
+  font-size: 130%;
+}
+
+#blog-title:hover {
+  color: blue;
+  font-size: 160%;
+}
+
+#blog-date {
+  color: gray;
+}
+
+#blog-header {
+  display: flex;
+  justify-content: space-evenly;
+}
+#blog-header-title {
+  font-size: 200%;
+  font-style: oblique;
+  text-decoration: solid;
+}
+#blog-header-btn > button {
+  border: 1px solid white;
+  background-color: #fff;
+  font-size: 120%;
+}

@@ -40,7 +40,7 @@ THIRD_PARTY_APPS = [
 ]
 
 CUSTOM_APPS = [
-    # "blog",
+    "pages",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS;
@@ -124,9 +124,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-# ]
+if config("ENV",cast=str,default="local") == "local":
+    STATICFILES_DIRS = [
+        BASE_DIR / "static",
+    ]
+
+LOGIN_URL = "/account/login";
+LOGIN_REDIRECT_URL = "/admin";
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
