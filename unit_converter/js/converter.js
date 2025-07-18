@@ -1,6 +1,6 @@
 const length_form  = document.getElementById("Length-form");
 
-const len_units = ["mm","cm","dc","m"];
+const len_units = ["µm","mm","cm","dc","m","dam","km","Mm"];
 
 const errors = document.getElementById("errors");
 const converter_page = document.getElementById("convert-page");
