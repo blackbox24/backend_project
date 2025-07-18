@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        nav{
+            display: flex;
+            justify-content: space-evenly;
+        }
+        nav > a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .active-nav{
+            text-decoration: underline;
+            text-decoration-color: blue;
+        }
+        #result-page{
+            display: none;
+        }
+        #errors{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#Length" class="active-nav">Length</a>
+        <a href="#Weight">Weight</a>
+        <a href="#Tempature">Tempature</a>
+    </nav>
+    <main>
+        <h2 id="errors"></h2>
+        <div id="convert-page">
+            <div id="Length" class="active">
+                <form method="post" id="Length-form">
+                    <div>
+                        <label>Enter the Length to convert</label>
+                    <input type="number" name="length_value" placeholder="Enter the Length to convert"/>
+                    </div>
+                    <div>
+                        <label>Unit to convert from</label>
+                        <select name="unit_from" required>
+                            <option value="" disabled selected>Select unit</option>
+                            <option value="mm">mm</option>
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                            <option value="km">km</option>
+                            <option value="inch">inch</option>
+                            <option value="foot">foot</option>
+                            <option value="yard">yard</option>
+                            <option value="mile">mile</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Unit to convert to</label>
+                        <select name="unit_to" required>
+                            <option value="" disabled selected>Select unit</option>
+                            <option value="mm">mm</option>
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                            <option value="km">km</option>
+                            <option value="inch">inch</option>
+                            <option value="foot">foot</option>
+                            <option value="yard">yard</option>
+                            <option value="mile">mile</option>
+                        </select>
+                    </div>
+                    <button type="submit" value="submit">Convert</button>
+                </form>
+            </div>
+            <div id="Weight">
+                <form id="Weight-form">
+
+                </form>
+            </div>
+            <div id="Tempature">
+                <form id="Tempature-form">
+
+                </form>
+            </div>
+        </div>
+        <div id="result-page">
+            <h3>Result of your calulation</h3>
+            <h4>
+                <span id="from_id"></span> = <span id="result_id"></span>
+            </h4>
+            <button id="reset-btn">Reset</button>
+        </div>
+    </main>
+    
+    <footer>
+        <script src="./js/converter.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            document.getElementById("reset-btn").addEventListener("click",()=>{  
+                window.location.reload();
+            })
+        </script>
+    </footer>
+</body>
+</html>
