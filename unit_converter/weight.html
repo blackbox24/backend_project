@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="./index.html">Length</a>
+        <a href="./weight.html"  class="active-nav">Weight</a>
+        <a href="./temperature.html">Tempature</a>
+    </nav>
+    <main>
+        <h2 id="errors"></h2>
+        <div id="convert-page">
+            <div id="weight" class="active">
+                <form method="post" id="Weight-form">
+                    <div>
+                        <label>Enter the Length to convert</label>
+                    <input type="number" name="length_value" placeholder="Enter the Weight to convert"/>
+                    </div>
+                    <div>
+                        <label>Unit to convert from</label>
+                        <select name="unit_from" required>
+                            <option value="" disabled selected>Select unit</option>
+                            <option value="mg">Milligram</option>
+                            <option value="g">Gram</option>
+                            
+                        </select>
+                    </div>
+                    <div>
+                        <label>Unit to convert to</label>
+                        <select name="unit_to" required>
+                            <option value="" disabled selected>Select unit</option>
+                            <option value="mg">Milligram</option>
+                            <option value="g">Gram</option>
+                        </select>
+                    </div>
+                    <button type="submit" value="submit">Convert</button>
+                </form>
+            </div>
+            
+        </div>
+        <div id="result-page">
+            <h3>Result of your calulation</h3>
+            <h4>
+                <span id="from_id"></span> = <span id="result_id"></span>
+            </h4>
+            <button id="reset-btn">Reset</button>
+        </div>
+    </main>
+    
+    <footer>
+        <script src="./js/weight_converter.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            document.getElementById("reset-btn").addEventListener("click",()=>{  
+                window.location.reload();
+            })
+        </script>
+    </footer>
+</body>
+</html>
