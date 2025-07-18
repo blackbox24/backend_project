@@ -28,58 +28,40 @@
 </head>
 <body>
     <nav>
-        <a href="./index.html"  class="active-nav">Length</a>
-        <a href="./weight.html">Weight</a>
+        <a href="./index.html">Length</a>
+        <a href="./weight.html"  class="active-nav">Weight</a>
         <a href="./tempature.html">Tempature</a>
     </nav>
     <main>
         <h2 id="errors"></h2>
         <div id="convert-page">
-            <div id="Length" class="active">
-                <form method="post" id="Length-form">
+            <div id="weight" class="active">
+                <form method="post" id="Weight-form">
                     <div>
                         <label>Enter the Length to convert</label>
-                    <input type="number" name="length_value" placeholder="Enter the Length to convert"/>
+                    <input type="number" name="length_value" placeholder="Enter the Weight to convert"/>
                     </div>
                     <div>
                         <label>Unit to convert from</label>
                         <select name="unit_from" required>
                             <option value="" disabled selected>Select unit</option>
-                            <option value="µm">Micrometer</option>
-                            <option value="mm">Millimter</option>
-                            <option value="cm">Centimeter</option>
-                            <option value="m">Meter</option>
-                            <option value="dam">Decameter</option>
-                            <option value="km">Kilometer</option>
-                            <option value="Mm">Megamter</option>
+                            <option value="mg">Milligram</option>
+                            <option value="g">Gram</option>
+                            
                         </select>
                     </div>
                     <div>
                         <label>Unit to convert to</label>
                         <select name="unit_to" required>
                             <option value="" disabled selected>Select unit</option>
-                            <option value="µm">Micrometer</option>
-                            <option value="mm">Millimter</option>
-                            <option value="cm">Centimeter</option>
-                            <option value="m">Meter</option>
-                            <option value="dam">Decameter</option>
-                            <option value="km">Kilometer</option>
-                            <option value="Mm">Megamter</option>
+                            <option value="mg">Milligram</option>
+                            <option value="g">Gram</option>
                         </select>
                     </div>
                     <button type="submit" value="submit">Convert</button>
                 </form>
             </div>
-            <div id="Weight">
-                <form id="Weight-form">
-
-                </form>
-            </div>
-            <div id="Tempature">
-                <form id="Tempature-form">
-
-                </form>
-            </div>
+            
         </div>
         <div id="result-page">
             <h3>Result of your calulation</h3>
@@ -91,7 +73,7 @@
     </main>
     
     <footer>
-        <script src="./js/converter.js" type="text/javascript"></script>
+        <script src="./js/weight_converter.js" type="text/javascript"></script>
         <script type="text/javascript">
             document.getElementById("reset-btn").addEventListener("click",()=>{  
                 window.location.reload();
