@@ -124,7 +124,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-if config("ENV",cast=str,default="local") == "local":
+ENV = config("ENV",cast=str,default="local")
+logger.info(f"ENV: {ENV}")
+
+if  ENV == "local":
     STATICFILES_DIRS = [
         BASE_DIR / "static",
     ]
