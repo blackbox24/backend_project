@@ -7,3 +7,4 @@ Backend projects from [roadmap]("https://roadmap.sh")
 3. Number Guessing Game : https://roadmap.sh/projects/number-guessing-game
 4. Unit convertor: https://roadmap.sh/projects/unit-converter
 5. Personal Blog: https://roadmap.sh/projects/personal-blog
+6. Weather API: https://roadmap.sh/projects/weather-api-wrapper-service
