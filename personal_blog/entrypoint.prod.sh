@@ -12,5 +12,9 @@ then
 fi
 
 # python manage.py flush --no-input
+python manage.py migrate
+python manage.py collectstatic 
+python manage.py seed_db
+python manage.py test
 
 exec "$@"

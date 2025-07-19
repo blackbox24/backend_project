@@ -21,7 +21,7 @@ DEBUG = config("DEBUG", cast=bool)
 logger.info(f"DEBUG: {DEBUG}")
 
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(", ")
+ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 logger.info(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 
@@ -89,7 +89,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config("SQL_DATABSE", cast=str),
+            'NAME': config("SQL_DATABASE", cast=str),
             "USER": config("SQL_USER", cast=str),
             "HOST": config("SQL_HOST", cast=str),
             "PORT": config("SQL_PORT", cast=str),
@@ -134,15 +134,11 @@ USE_TZ = True
 ENV = config("ENV", cast=str, default="local")
 logger.info(f"ENV: {ENV}")
 
-if ENV == "local":
-    STATICFILES_DIRS = [
-        BASE_DIR / "static",
-    ]
 
 LOGIN_URL = "/account/login"
 LOGIN_REDIRECT_URL = "/admin"
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
