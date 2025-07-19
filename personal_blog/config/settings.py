@@ -88,7 +88,16 @@ if USE_SQLITE:
         }
     }
 else:
-    logger.error("No database found")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config("SQL_DATABSE",cast=str),
+            "USER": config("SQL_USER",cast=str),
+            "HOST": config("SQL_HOST",cast=str),
+            "PORT": config("SQL_PORT",cast=str),
+            "PASSWORD": config("SQL_PASSWORD",cast=str),
+        }
+    }
 
 
 # Password validation

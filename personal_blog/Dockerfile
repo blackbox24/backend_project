@@ -10,11 +10,10 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN python -m pip install --no-cache-dir -r ./requirements.txt \
-    && python manage.py migrate \
-    && python manage.py collectstatic \
-    && python manage.py seed_db \
-    && python manage.py test
+    && sed -i 's/\r$//g' /usr/src/app/entrypoint.sh \
+    && chmod +x /usr/src/app/entrypoint.sh 
 
 EXPOSE 8000
 
-# CMD ["python","manage.py","runserver"]
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
