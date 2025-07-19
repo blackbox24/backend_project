@@ -3,8 +3,8 @@ from decouple import config
 from django.core.management.utils import get_random_secret_key
 import logging
 
-logging.basicConfig(level=logging.INFO);
-logger = logging.getLogger(__name__);
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,14 +14,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY",cast=str)
+SECRET_KEY = config("SECRET_KEY", cast=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG",cast=bool)
+DEBUG = config("DEBUG", cast=bool)
 logger.info(f"DEBUG: {DEBUG}")
 
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(", ")
 logger.info(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 
@@ -35,15 +35,13 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = [
-    
-]
+THIRD_PARTY_APPS = []
 
 CUSTOM_APPS = [
     "pages",
 ]
 
-INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS;
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,8 +75,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-USE_SQLITE = config("USE_SQLITE",cast=bool)
-logger.info("USE_SQLITE: "+ str(USE_SQLITE));
+USE_SQLITE = config("USE_SQLITE", cast=bool)
+logger.info("USE_SQLITE: "+ str(USE_SQLITE))
 
 if USE_SQLITE:
     DATABASES = {
@@ -91,11 +89,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config("SQL_DATABSE",cast=str),
-            "USER": config("SQL_USER",cast=str),
-            "HOST": config("SQL_HOST",cast=str),
-            "PORT": config("SQL_PORT",cast=str),
-            "PASSWORD": config("SQL_PASSWORD",cast=str),
+            'NAME': config("SQL_DATABSE", cast=str),
+            "USER": config("SQL_USER", cast=str),
+            "HOST": config("SQL_HOST", cast=str),
+            "PORT": config("SQL_PORT", cast=str),
+            "PASSWORD": config("SQL_PASSWORD", cast=str),
         }
     }
 
@@ -133,16 +131,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-ENV = config("ENV",cast=str,default="local")
+ENV = config("ENV", cast=str, default="local")
 logger.info(f"ENV: {ENV}")
 
-if  ENV == "local":
+if ENV == "local":
     STATICFILES_DIRS = [
         BASE_DIR / "static",
     ]
 
-LOGIN_URL = "/account/login";
-LOGIN_REDIRECT_URL = "/admin";
+LOGIN_URL = "/account/login"
+LOGIN_REDIRECT_URL = "/admin"
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -154,35 +152,35 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGGER = {
     "version": 1,
-    "diable_existing_logger":False,
-    "formatters":{
-        "verbose":{
-            "format":"{levelname} {asctime} {message}",
+    "diable_existing_logger": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {message}",
             "style": "{",
         },
         "simple": {
-            "format":"{levelname} {message}",
+            "format": "{levelname} {message}",
             "style": "{"
         },
     },
-    "handlers":{
-        "console":{
-            "level":"INFO",
+    "handlers": {
+        "console": {
+            "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "simple",
             "propagate": True
         },
-        "file":{
-            "level":"WARNING",
+        "file": {
+            "level": "WARNING",
             "class": "FileHandler",
             "formatter": "verbose",
             "propagate": True,
             "filename": BASE_DIR / "warnings.log",
         }
     },
-    "loggers":{
-        "django":{
-            "handlers":["console","file"],
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
         }
     }
 }

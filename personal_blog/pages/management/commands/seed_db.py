@@ -15,10 +15,10 @@ class Command(BaseCommand):
             "You can implement basic authentication for the admin section. You can either use the standard HTTP basic authentication or simply hardcode the username and password in the code for now and create a simple login page that will create a session for the admin."
 
         ]
-        for i in range(0,10):
+        for i in range(0, 10):
             try:
                 Blog.objects.create(
-                    title=f"My first random blog {i+1}",
+                    title=f"My first random blog {i}",
                     content=choice(contents)
                 )
                 self.stdout.write(self.style.SUCCESS(f"successfully created blog {i}"))

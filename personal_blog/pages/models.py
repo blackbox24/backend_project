@@ -9,8 +9,9 @@ class BaseTimeModel(models.Model):
         abstract = True
 
 class Blog(BaseTimeModel):
-    title = models.CharField(max_length=50,null=False)
+    title = models.CharField(max_length=50, null=False)
     content = models.TextField()
 
     def __str__(self):
         return self.title
+    
