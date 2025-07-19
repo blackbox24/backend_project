@@ -1,0 +1,72 @@
+###########
+# BUILDER #
+###########
+
+# pull official base image
+FROM python:3.12-slim as builder
+
+# SET WORK DIRECTORY
+WORKDIR /usr/src/app
+
+# SET ENVIRONMENTS
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# INSTALL PACKAGES
+RUN apt-get update \ 
+    && apt-get install -y --no-install-recommends gcc \
+    &&  pip install --upgrade pip \
+    &&  pip install flake8==6.0.0 
+
+COPY . /usr/src/app/
+# RUN flake8 --ignore=E501,F401 .
+
+
+# install python dependencies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+
+#########
+# FINAL #
+#########
+
+FROM python:3.12-slim
+
+# CREATE DIRECTORY FOR APP USER
+RUN mkdir -p /home/app \
+
+    # CREATE APP USER 
+    && addgroup --system app && adduser --system --group app
+
+
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+
+RUN mkdir  "$APP_HOME"
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apt-get update \
+    && apt-get clean
+
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+
+RUN pip install --upgrade pip \
+    && pip install --no-cache /wheels/*
+
+# copy entrypoint.prod.sh
+COPY ./entrypoint.prod.sh .
+RUN sed -i 's/\r$//g'  "$APP_HOME/entrypoint.prod.sh" \
+    && chmod +x  "$APP_HOME/entrypoint.prod.sh"
+
+COPY . %APP_HOME
+
+# chown all the files to the app user
+RUN chown -R app:app "$APP_HOME"
+
+USER app
+
+ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+
