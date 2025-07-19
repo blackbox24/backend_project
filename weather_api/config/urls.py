@@ -16,5 +16,6 @@ schema = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api/weather/",include("weather.urls")),
     path("docs/",schema.with_ui("swagger",cache_timeout=0),name="swagger"),
 ]
