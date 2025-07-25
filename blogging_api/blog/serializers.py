@@ -1,0 +1,25 @@
+from rest_framework import serializers
+from .models import BlogPost, Tag
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+
+
+class PostSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BlogPost
+        fields = ['id', 'title', 'content', 'category', 'tags', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+    
+    def create(self, validated_data):
+        tags_data = validated_data.pop('tags', [])
+        post = BlogPost.objects.create(**validated_data)
+        for tag_data in tags_data:
+            tag, _ = Tag.objects.get_or_create(name=tag_data['name'])
+            post.tags.add(tag)
+        return post
