@@ -3,6 +3,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 from .models import BlogPost, Tag
 
 from .serializers import PostSerializer, TagSerializer
@@ -13,7 +15,12 @@ from drf_yasg.utils import swagger_auto_schema
 class BlogPostListView(APIView):
     @swagger_auto_schema(responses={200: PostSerializer(many=True)})
     def get(self, request):
-        posts = BlogPost.objects.all()
+        if cache.get('blog_posts'):
+            logger.info("Cache hit for blog posts")
+            posts = cache.get('blog_posts')
+        else:
+            posts = BlogPost.objects.prefetch_related('tags').all()
+            cache.set('blog_posts', posts, 60 * 15)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -22,6 +29,9 @@ class BlogPostListView(APIView):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.set('blog_posts', None)
+            logger.info("Cache invalidated for blog posts")
+            # cache.delete('blog_posts')  # Invalidate cache for all posts
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -30,6 +40,10 @@ class BlogPostDetailView(APIView):
     def get(self, request, pk):
         try:
             post = BlogPost.objects.get(pk=pk)
+            cache.set(f'blog_post_{pk}', post, 60 * 15)
+            cache.set('blog_posts', None)  # Invalidate cache for all posts
+            logger.info(f"Cache updated for blog post {pk}")
+
             serializer = PostSerializer(post)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except BlogPost.DoesNotExist:
@@ -39,6 +53,10 @@ class BlogPostDetailView(APIView):
     def put(self, request, pk):
         try:
             post = BlogPost.objects.get(pk=pk)
+            cache.set(f'blog_post_{pk}', post, 60 * 15)
+            cache.set('blog_posts', None)  # Invalidate cache for all posts
+            logger.info(f"Cache updated for blog post {pk}")
+
             serializer = PostSerializer(post, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -52,6 +70,11 @@ class BlogPostDetailView(APIView):
         try:
             post = BlogPost.objects.get(pk=pk)
             post.delete()
+
+            cache.set('blog_posts', None)  # Invalidate cache for all posts
+            logger.info(f"Cache invalidated for blog post {pk}")
+            cache.delete(f'blog_post_{pk}')
+
             return Response(status=status.HTTP_204_NO_CONTENT)
         except BlogPost.DoesNotExist:
             return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -59,7 +82,12 @@ class BlogPostDetailView(APIView):
 class TagListView(APIView):
     @swagger_auto_schema(responses={200: TagSerializer(many=True)})
     def get(self, request):
-        tags = Tag.objects.all()
+        if cache.get('tags'):
+            logger.info("Cache hit for tags")
+            tags = cache.get('tags')
+        else:
+            tags = Tag.objects.all()
+            cache.set('tags', tags, 60 * 15)
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -88,6 +116,8 @@ class TagDetailView(APIView):
             serializer = TagSerializer(tag, data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                cache.set(f'tag_{pk}', tag, 60 * 15)
+                logger.info(f"Cache updated for tag {pk}")
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Tag.DoesNotExist:
@@ -98,6 +128,9 @@ class TagDetailView(APIView):
         try:
             tag = Tag.objects.get(pk=pk)
             tag.delete()
+            cache.set('tags', None)  # Invalidate cache for all tags
+            logger.info(f"Cache invalidated for tag {pk}")
+            cache.delete(f'tag_{pk}')
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Tag.DoesNotExist:
             return Response({"error": "Tag not found"}, status=status.HTTP_404_NOT_FOUND)
