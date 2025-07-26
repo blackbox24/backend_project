@@ -9,7 +9,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, read_only=True)
+    # tags = TagSerializer(many=True)
 
     class Meta:
         model = BlogPost
@@ -22,6 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
         print(tags)
         post = BlogPost.objects.create(**validated_data)
         for tag_data in tags_data:
-            tag, _ = Tag.objects.get_or_create(name=tag_data['name'])
+            print(tag_data)
+            tag, _ = Tag.objects.get_or_create(name=tag_data)
             post.tags.add(tag)
         return post

@@ -13,6 +13,9 @@ class BlogPostSerializerTests(TestCase):
         serializer = PostSerializer(data=data)
         self.assertTrue(serializer.is_valid())
         self.assertEqual(serializer.validated_data['title'], "Test Post")
+        self.assertEqual(serializer.validated_data['content'], "This is a test post.")
+        self.assertEqual(len(serializer.validated_data['tags']), 1)
+        self.assertEqual(serializer.validated_data['tags'][0]['name'], "test")
 
     def test_invalid_serializer(self):
         data = {
