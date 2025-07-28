@@ -1,0 +1,10 @@
+django
+python-decouple
+gunicorn
+redis
+django-redis
+drf-yasg
+django-restframework
+django-guardian
+dj-rest-auth 
+django-allauth
