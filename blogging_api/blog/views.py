@@ -10,17 +10,29 @@ from .models import BlogPost, Tag
 from .serializers import PostSerializer, TagSerializer
 from config.settings import logger
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 # Create your views here.
 class BlogPostListView(APIView):
-    @swagger_auto_schema(responses={200: PostSerializer(many=True)})
+    @swagger_auto_schema(responses={200: PostSerializer(many=True)}, manual_parameters=[
+        openapi.Parameter('terms', openapi.IN_QUERY, description="Search terms for blog posts", type=openapi.TYPE_STRING)
+    ])
     def get(self, request):
-        if cache.get('blog_posts'):
+        terms = request.query_params.get("terms", "")
+        if terms != "" and cache.get(f'blog_posts:{terms}'):
+            posts = cache.get(f'blog_posts:{terms}')
+            logger.info("Cache hit for blog posts with search terms")
+        elif terms != "" and cache.get(f'blog_posts:{terms}') is None:
+            posts = BlogPost.objects.filter(title__icontains=terms).prefetch_related('tags')
+            cache.set(f'blog_posts:{terms}', posts, 60 * 15)
+            logger.info("Cache updated for blog posts with search terms")
+        elif terms == "" and cache.get('blog_posts') != None: 
             logger.info("Cache hit for blog posts")
             posts = cache.get('blog_posts')
         else:
             posts = BlogPost.objects.prefetch_related('tags').all()
             cache.set('blog_posts', posts, 60 * 15)
+            logger.info("Cache updated for all blog posts")
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -38,6 +50,7 @@ class BlogPostListView(APIView):
 class BlogPostDetailView(APIView):
     @swagger_auto_schema(responses={200: PostSerializer})
     def get(self, request, pk):
+
         try:
             post = BlogPost.objects.get(pk=pk)
             cache.set(f'blog_post_{pk}', post, 60 * 15)
