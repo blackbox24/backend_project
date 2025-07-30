@@ -42,23 +42,28 @@ THIRD_PARTY_APPS = [
     "guardian",
 ]
 
-CUSTOM_APPS =  []
+CUSTOM_APPS =  [
+    "expense",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 AUTHENTICATION_BACKENDS = [
-    "guardian.backends,ObjectPermissionBackend",
-    "django.contrib.auth.backends,ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 SITE_ID = 1
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES":[
-        "rest_framework.permission.IsAuthentication",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    "DEFAULT_VERSIONING_CLASSES": [
+        "rest_framework.versioning.URLPathVersioning",
     ]
 }
 
@@ -197,6 +202,10 @@ LOGGING = {
     },
     "loggers":{
         "django": {
+            "handlers": ["console","file"],
+            "propagate": True
+        },
+        "expense.views": {
             "handlers": ["console","file"],
             "propagate": True
         }
