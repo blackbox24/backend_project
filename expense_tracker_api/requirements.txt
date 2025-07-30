@@ -1,0 +1,8 @@
+django
+python-decouple
+gunicorn
+redis
+django-redis
+drf-yasg
+django-restframework
+djangorestframework-simplejwt
