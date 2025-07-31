@@ -5,6 +5,9 @@ from rest_framework import status
 from guardian.shortcuts import assign_perm, get_objects_for_user
 
 from drf_yasg.utils import swagger_auto_schema
+from datetime import datetime
+import pytz
+
 from drf_yasg import openapi
 from config.versions import CustomVersoning
 from .serializers import ExpenseSerializer
@@ -15,18 +18,51 @@ import logging
 
 logger = logging.getLogger("expense.views")
 
+def convert_date_format(date):
+    date = datetime.strptime(date,"%Y-%m-%d")
+    utc_timezone = pytz.utc
+    dt_with_time_and_tz = utc_timezone.localize(date.replace(hour=0, minute=0, second=0, microsecond=0))
+    formatted_date = dt_with_time_and_tz.strftime("%Y-%m-%d %H:%M:%S%z")
+    return formatted_date
+
 class ExpenseView(APIView):
     versioning_class = CustomVersoning
     serializer = ExpenseSerializer
     
-    # @swagger_auto_schema(manual_parameters=[
-    #     openapi.Parameter('search', openapi.IN_QUERY, description="Search terms for blog posts", type=openapi.TYPE_STRING)
-    # ])
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('week', openapi.IN_QUERY, description="Past week", type=openapi.TYPE_STRING),
+        openapi.Parameter('month', openapi.IN_QUERY, description="Past month", type=openapi.TYPE_STRING),
+        openapi.Parameter('start', openapi.IN_QUERY, description="Start date", type=openapi.TYPE_STRING),
+        openapi.Parameter('end', openapi.IN_QUERY, description="End date", type=openapi.TYPE_STRING)
+    ])
     def get(self,request,*args, **kwargs):
-        objects = Expense.objects.all()
-        data = get_objects_for_user(request.user,perms="expense.view_expense",klass=objects,use_groups=False,accept_global_perms=False)
-        data = self.serializer(data,many=True).data
-        return Response(data,status=status.HTTP_200_OK)
+        try:
+            start_date = request.query_params.get("start","")
+            end_date = request.query_params.get("end","")
+            month = request.query_params.get("month","")
+            week = request.query_params.get("week","")
+            
+            
+            if start_date != "" and end_date != "":
+                start_date =  convert_date_format(start_date)
+                end_date =  convert_date_format(end_date)
+                logger.info(f"start date: {start_date}")
+                objects = Expense.objects.filter(
+                    updated_at__range=(start_date,end_date)
+                )
+            elif month != "":
+                objects = Expense.objects.filter(updated_at__month=month)
+            elif week != "":
+                objects = Expense.objects.filter(updated_at__week=week)
+            else:
+                objects = Expense.objects.all()
+
+            data = get_objects_for_user(request.user,perms="expense.view_expense",klass=objects,use_groups=False,accept_global_perms=False)
+            data = self.serializer(data,many=True).data
+            return Response(data,status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error occurred: {e}")
+            return Response({"error":e},status=status.HTTP_400_BAD_REQUEST)
     
     
     @swagger_auto_schema(responses={201:ExpenseSerializer},request_body=ExpenseSerializer)
