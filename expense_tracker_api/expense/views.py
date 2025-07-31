@@ -62,9 +62,9 @@ class ExpenseDetailView(APIView):
     def get(self,request,pk,*args, **kwargs):
         _object = self.fetch_expense(pk)
         if _object != None:
-            data = self.serializer(data=_object).data
-            return Response(data,status=status.HTTP_200_OK)
-        
+            serialized_data = self.serializer(_object)
+
+            return Response(serialized_data.data,status=status.HTTP_200_OK)
         return Response({"error":"Error occurred"},status=status.HTTP_400_BAD_REQUEST)
         
     

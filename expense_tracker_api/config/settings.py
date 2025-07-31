@@ -208,6 +208,10 @@ LOGGING = {
         "expense.views": {
             "handlers": ["console","file"],
             "propagate": True
+        },
+        "expense.tests": {
+            "handlers": ["console","file"],
+            "propagate": True
         }
     }
 }
