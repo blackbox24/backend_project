@@ -11,3 +11,4 @@ Backend projects from [roadmap]("https://roadmap.sh")
 7. Blogging API: https://roadmap.sh/projects/blogging-platform-api
 8. Todo API: https://roadmap.sh/projects/todo-list-api
 9. Expense Tracker API: https://roadmap.sh/projects/expense-tracker-api
+10. TMDB CLI: https://roadmap.sh/projects/tmdb-cli
